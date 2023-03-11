@@ -10,11 +10,7 @@ local data = {
             ["color"] = tonumber(0x78da),
             ["fields"] = {
                 {
-                    ["name"] = "Cracker",
-                    ["value"] = "```yml\n".. NameGames .."\n```"
-                },
-                {
-                    ["name"] = "Discord Id",
+                    ["name"] = "Cracker : Discord Id",
                     ["value"] = "```yml\n".. Text_Id .."\n```"
                 },
                 {
