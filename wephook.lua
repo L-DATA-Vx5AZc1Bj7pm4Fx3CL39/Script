@@ -1,4 +1,4 @@
-local url = wephook
+local url = wephook[1]
 local Infomation = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
 local placeId = game.PlaceId
 local NameGames = Infomation.Name
