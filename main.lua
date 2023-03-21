@@ -1576,8 +1576,8 @@ MakerAtt = function(Fre)
                                     local FindHealth = v:FindFirstChild("Humanoid").MaxHealth / 4 --iei
                                     local Max = FindMon / Lv_DAMAGE_BYPASS --Ex : 15 => 15 Hits 
                                     Ani.AnimationId = AC.anims.basic[2]
-                                    AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
-                                    AC.hitboxMagnitude = 60
+                                    AC.humanoid:LoadAnimation(Ani):Play(2, 2)
+                                    game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))  
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade())); 
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "")
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "") wait()
@@ -1590,7 +1590,7 @@ MakerAtt = function(Fre)
                                     local Max = FindMon / Lv_DAMAGE_BYPASS --Ex : 15 => 15 Hits 
                                     Ani.AnimationId = AC.anims.basic[2]
                                     AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
-                                    AC.hitboxMagnitude = 60
+                                    game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade())); 
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "")
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "") wait()
@@ -1606,8 +1606,7 @@ MakerAtt = function(Fre)
                     if v.Humanoid.Health > 0 then
                         if (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 55 then
                             if AC.blades and AC.blades[1] then
-                                Ani.AnimationId = AC.anims.basic[2]
-                                AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
+                                game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))
                                 AC.increment = 4
                                 AC.hitboxMagnitude = 58.5
                                 AC.timeToNextBlock = tick() -(rA)
