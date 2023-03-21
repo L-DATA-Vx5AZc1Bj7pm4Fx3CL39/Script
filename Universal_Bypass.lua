@@ -4,7 +4,6 @@ until game:IsLoaded()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/L-DATA-Vx5AZc1Bj7pm4Fx3CL39/Script/main/Secret.lua'))()
 
 local Disables = {
-    game:GetService("Players").LocalPlayer.Idled,
     game:GetService("ScriptContext").Error,
     game:GetService("LogService").MessageOut
 }
