@@ -41,9 +41,6 @@ OldNameCall =
             if table.find(Nos, getnamecallmethod()) and table.find(Yes, self)   then
                 return nil or wait(math.huge)
             end
-            if getnamecallmethod()=="FindService" and self.Name == "VirtualUser" and self.Name == "VirtualInputManager" then
-                return 
-            end
             if typeof(A) ~= "Instance" then
                 return OldNameCall(self, ...)
             end
@@ -58,7 +55,5 @@ if setfflag then
 end
 
 if setfpscap then
-    setfpscap(65)
+    setfpscap(75)
 end
-
-game:GetService("ScriptContext"):SetTimeout(0.5)
