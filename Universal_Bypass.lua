@@ -22,10 +22,24 @@ local Yes = {
     game:GetService("CoreGui"),
 }
 
-for i, v in pairs(Disables) do
-    for i, v in pairs(getconnections(v)) do
-        v:Disable()
-    end
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(...)
+    local Args = {...}
+    local A, B, C = ...
+    if table.find(Nos, A.Name) then
+        return 
+    end 
+    return OldNameCall(...)
+end)
+
+for i,v in pairs(Disables) do 
+    for i,v in pairs(getconnections(v)) do
+        if v.Disable then
+            v:Disable()
+        elseif v.Disconnect then
+            v:Disconnect()
+        end 
+    end 
 end
 
 
