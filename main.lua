@@ -195,12 +195,12 @@ Options.S_me:OnChanged(function(vu)
     _ToolTip = vu
 end)
 
-FastTi = 0.1
+FastTi = 0.125
 Options.S_att:OnChanged(function(vu)
     if vu == 'Slow' then
         FastTi = 0.35
     elseif vu == 'Normal' then
-        FastTi = 0.1
+        FastTi = 0.125
     elseif vu == 'Maximum' then
         McDeTTT = 0.025
         FastTi = McDeTTT
@@ -1512,88 +1512,84 @@ Options.lv_bps:OnChanged(function(vu)
     Lv_DAMAGE_BYPASS = vu
 end)
 
+local CbFw = debug.getupvalues(require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild("CombatFramework")))[2]
+local plr = game.Players.LocalPlayer
+function GetBlade()
+    local p13 = CbFw.activeController
+    local ret = p13.blades[1]
+    if not ret then 
+        return 
+    end
+    while ret.Parent ~= plr.Character do 
+        ret = ret.Parent 
+    end 
+    return ret
+end 
+function getHitsEnemies(Size)
+    local Hits = {}
+    local Enemies = workspace.Enemies:GetChildren()
+    for i = 1,#Enemies do 
+        local v = Enemies[i]
+        local Human = v:FindFirstChildOfClass("Humanoid")
+        if Human and Human.RootPart and Human.Health > 0 and game.Players.LocalPlayer:DistanceFromCharacter(Human.RootPart.Position) < Size then
+            table.insert(Hits,Human.RootPart)
+        end
+    end
+    return Hits
+end
+function getHitsAll(Size)
+    local Hits = {}
+    local Enemies = workspace.Enemies:GetChildren()
+    local Characters = workspace.Characters:GetChildren()
+    for i = 1,#Enemies do 
+        local v = Enemies[i]
+        local Human = v:FindFirstChildOfClass("Humanoid")
+        if Human and Human.RootPart and Human.Health > 0 and game.Players.LocalPlayer:DistanceFromCharacter(Human.RootPart.Position) < Size then
+            table.insert(Hits,Human.RootPart)
+        end
+    end
+    for i = 1,#Characters do 
+        local v = Characters[i]
+        if v ~= plr.Character then
+            local Human = v:FindFirstChildOfClass("Humanoid")
+            if Human and Human.RootPart and Human.Health > 0 and game.Players.LocalPlayer:DistanceFromCharacter(Human.RootPart.Position) < Size then
+                table.insert(Hits,Human.RootPart)
+            end
+        end
+    end
+    return Hits
+end
 MakerAtt = function(Fre)
     pcall(function()
         local Ani = Instance.new("Animation")
         local Lv = game:GetService("Players").LocalPlayer.Data.Level.Value
-        local CbFw = debug.getupvalues(require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild("CombatFramework")))[2]
-        local plr = game.Players.LocalPlayer
         local AC = CbFw.activeController
-        function GetBlade()
-            local p13 = CbFw.activeController
-            local ret = p13.blades[1]
-            if not ret then 
-                return 
-            end
-            while ret.Parent ~= plr.Character do 
-                ret = ret.Parent 
-            end 
-            return ret
-        end 
-        function getHitsEnemies(Size)
-            local Hits = {}
-            local Enemies = workspace.Enemies:GetChildren()
-            for i = 1,#Enemies do 
-                local v = Enemies[i]
-                local Human = v:FindFirstChildOfClass("Humanoid")
-                if Human and Human.RootPart and Human.Health > 0 and game.Players.LocalPlayer:DistanceFromCharacter(Human.RootPart.Position) < Size then
-                    table.insert(Hits,Human.RootPart)
-                end
-            end
-            return Hits
-        end
-        function getHitsAll(Size)
-            local Hits = {}
-            local Enemies = workspace.Enemies:GetChildren()
-            local Characters = workspace.Characters:GetChildren()
-            for i = 1,#Enemies do 
-                local v = Enemies[i]
-                local Human = v:FindFirstChildOfClass("Humanoid")
-                if Human and Human.RootPart and Human.Health > 0 and game.Players.LocalPlayer:DistanceFromCharacter(Human.RootPart.Position) < Size then
-                    table.insert(Hits,Human.RootPart)
-                end
-            end
-            for i = 1,#Characters do 
-                local v = Characters[i]
-                if v ~= plr.Character then
-                    local Human = v:FindFirstChildOfClass("Humanoid")
-                    if Human and Human.RootPart and Human.Health > 0 and game.Players.LocalPlayer:DistanceFromCharacter(Human.RootPart.Position) < Size then
-                        table.insert(Hits,Human.RootPart)
-                    end
-                end
-            end
-            return Hits
-        end
         for i = 1,1 do 
             if Fre == "Fireserver" then
                 if AC.blades and AC.blades[1] then  
                     task.spawn(function() 
                         for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
                             if v.Humanoid.Health > 0 then
-                                if v:FindFirstChild("Humanoid") and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 55 then  
-                                    local FindMon = v:FindFirstChild("Humanoid").MaxHealth
-                                    local log = v:FindFirstChild("Humanoid").Health
-                                    local FindHealth = v:FindFirstChild("Humanoid").MaxHealth / 4 --iei
-                                    local Max = FindMon / Lv_DAMAGE_BYPASS --Ex : 15 => 15 Hits 
+                                AC.hitboxMagnitude = 58.5
+                                if game:GetService("Players").LocalPlayer:DistanceFromCharacter(v.HumanoidRootPart.Position) <= 55 then
+                                    AC.hitboxMagnitude = 58.5
+                                    AC.hitboxMagnitude = 58.5
+                                    AC.hitboxMagnitude = 58.5
+                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade()));
+                                end
+                                if game:GetService("Players").LocalPlayer:DistanceFromCharacter(v.HumanoidRootPart.Position) <= 55 then
                                     Ani.AnimationId = AC.anims.basic[2]
                                     AC.humanoid:LoadAnimation(Ani):Play(2, 2)
-                                    game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))  
-                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade())); 
-                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "")
-                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "") wait()
-                                    v.Humanoid:TakeDamage(math.ceil(Max))
+                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsAll(55), rA, "") 
+                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsAll(55), rA, "") wait()
                                 end
-                                if v.Name == Ms and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 55 then  
+                                if game:GetService("Players").LocalPlayer:DistanceFromCharacter(v.HumanoidRootPart.Position) <= 55 and v:FindFirstChild("Humanoid") then
                                     local FindMon = v:FindFirstChild("Humanoid").MaxHealth
-                                    local log = v:FindFirstChild("Humanoid").Health
                                     local FindHealth = v:FindFirstChild("Humanoid").MaxHealth / 4 --iei
                                     local Max = FindMon / Lv_DAMAGE_BYPASS --Ex : 15 => 15 Hits 
                                     Ani.AnimationId = AC.anims.basic[2]
-                                    AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
-                                    game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))
-                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade())); 
-                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "")
-                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "") wait()
+                                    AC.humanoid:LoadAnimation(Ani):Play(2, 2)   
+                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsAll(55), rA, "") wait()
                                     v.Humanoid:TakeDamage(math.ceil(Max))
                                 end
                             end
@@ -1604,13 +1600,12 @@ MakerAtt = function(Fre)
             if Fre == "Attack" then
                 for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
                     if v.Humanoid.Health > 0 then
-                        if (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 55 then
+                        if game:GetService("Players").LocalPlayer:DistanceFromCharacter(v.HumanoidRootPart.Position) <= 55 then
                             if AC.blades and AC.blades[1] then
-                                game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))
                                 AC.increment = 4
                                 AC.hitboxMagnitude = 58.5
-                                AC.timeToNextBlock = tick() -(rA)
-                                AC.timeToNextAttack = tick() -(rA)
+                                AC.timeToNextBlock = tick() 
+                                AC.timeToNextAttack = tick()
                                 game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))
                             end
                         end
@@ -1652,7 +1647,7 @@ task.spawn(function() while wait()      do pcall(function() if Toggles.a_haki.Va
 task.spawn(function() while wait()      do pcall(function() if Toggles.genl1.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki","Geppo") game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki","Buso") game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki","Soru") end end) end end)
 task.spawn(function() while wait()      do pcall(function() if Toggles.genl1.Value == true then CheckLevel() end end) end end)
 task.spawn(function() while wait()      do pcall(function() if Toggles.RED_CODE.Value == true then (function() game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("GAMER_ROBOT_1M") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("ADMINGIVEAWAY") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("GAMERROBOT_YT") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("kittgaming") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Sub2Fer999") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Enyu_is_Pro") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Magicbus") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("JCWK") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Starcodeheo") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Bluxxy") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("SUB2GAMERROBOT_EXP1") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Sub2NoobMaster123") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Sub2Daigrock") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Axiore") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("TantaiGaming") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("StrawHatMaine") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("Sub2OfficialNoobie") game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer("TheGreatAce") end)(); end end) end end)
-task.spawn(function() while task.wait() do pcall(function() (function() if Toggles.Stats1.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", 1) end end)(); (function() if Toggles.Stats2.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Defense", 1) end end)(); (function() if Toggles.Stats3.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Sword", 1) end end)(); (function() if Toggles.Stats4.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Gun", 1) end end)(); (function() if Toggles.Stats5.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Demon Fruit", 1) end end)(); end) end end)
+task.spawn(function() while wait()      do pcall(function() (function() if Toggles.Stats1.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", 1) end end)(); (function() if Toggles.Stats2.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Defense", 1) end end)(); (function() if Toggles.Stats3.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Sword", 1) end end)(); (function() if Toggles.Stats4.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Gun", 1) end end)(); (function() if Toggles.Stats5.Value then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Demon Fruit", 1) end end)(); end) end end)
 task.spawn(function() while wait()      do pcall(function() if setscriptable then setscriptable(game.Players.LocalPlayer, "SimulationRadius", true) end if sethiddenproperty then sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge) end if sethiddenproperty then sethiddenproperty(game.Players.LocalPlayer, "MaxSimulationRadius", 9e26) end end) end end)
 task.spawn(function() while wait()      do pcall(function() if Toggles.a_superhuman.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuySuperhuman") end if Toggles.a_ElectriClaw.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyElectricClaw") end if Toggles.a_dragon.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyDragonTalon") end if Toggles.a_deathstep.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyDeathStep") end if Toggles.a_sharkmankarate.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuySharkmanKarate") end if Toggles.a_godhuman.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyGodhuman") end if Toggles.a_electro.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyElectro") end if Toggles.a_blackLeg.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyBlackLeg") end if Toggles.a_fishmankarate.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyFishmanKarate") end if Toggles.a_dragonclaw.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","1") task.wait() game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BlackbeardReward","DragonClaw","2") end end) end end)
 task.spawn(function() repeat wait()        pcall(function() game:GetService("StarterGui"):SetCore("DevConsoleVisible", false) end); until game:GetService("Players").LocalPlayer.Data.Level.Value == 2451; end)
