@@ -31,7 +31,7 @@ repeat wait()
 		end
 	end
 until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded()
-
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet('https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet('https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/addons/SaveManager.lua'))()
@@ -195,17 +195,15 @@ Options.S_me:OnChanged(function(vu)
     _ToolTip = vu
 end)
 
-FastTi = 0.125
+FastTi = 0.1
 Options.S_att:OnChanged(function(vu)
     if vu == 'Slow' then
         FastTi = 0.35
     elseif vu == 'Normal' then
-        FastTi = 0.125
+        FastTi = 0.1
     elseif vu == 'Maximum' then
         McDeTTT = 0.025
         FastTi = McDeTTT
-    else
-        FastTi = 0.35
     end
 end)
 
@@ -364,7 +362,7 @@ cb_l1:AddToggle('t_p_cam', {
 })
 
 cb_l1:AddToggle('t_att_players', {
-    Text = 'Kill Players',
+    Text = 'Kill Player',
     Default = false,
 })
 
@@ -435,7 +433,6 @@ local _Vr = Tabs.Visuals:AddRightGroupbox('Warp');
 _Vr:AddButton('Remote To First Sea', function() game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelMain"); end);
 _Vr:AddButton('Remote To Second Sea', function() game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa"); end);
 _Vr:AddButton('Remote To Third Sea', function() game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou"); end); _Vr:AddLabel('');
-_Vr:AddButton('Remote To Ghost Ship', function() game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125)); end); _Vr:AddLabel('');
 _Vr:AddButton('Remote To Mansion', function() local args = {[1] = "requestEntrance",[2] = Vector3.new(-12548.595703125, 337.17001342773, -7554.6103515625)};game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args)); end);
 _Vr:AddButton('Remote To Castle on the Sea', function() local args = {[1] = "requestEntrance",[2] = Vector3.new(-5079.44677734375, 313.7293395996094, -3151.065185546875)};game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args)); end);
 --------------------------------------------------------------------------
@@ -874,7 +871,7 @@ function CheckLevel()
             NameMon = "Ship Engineer"
             CFrameQ = CFrame.new(1040.2927246094, 125.08293151855, 32911.0390625)
             CFrameMon = CFrame.new(886.28179931641, 40.47790145874, 32800.83203125)
-			if FarmMode and (CFrameMon.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 20000 then
+			if (CFrameMon.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 20000 then
 				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
 			end
         elseif Lv == 1300 or Lv <= 1324 or SelectMonster == "Ship Steward [Lv. 1300]" then 
@@ -1157,7 +1154,7 @@ function CheckLevel()
 		end
 	end
 end
-
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 function TP(CFgo)
     task.spawn(function()
         pcall(function()
@@ -1574,16 +1571,14 @@ MakerAtt = function(Fre)
                         for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
                             if v.Humanoid.Health > 0 then
                                 if v:FindFirstChild("Humanoid") and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 55 then  
-                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade())); 
-                                end
-                                if v:FindFirstChild("Humanoid") and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 55 then  
                                     local FindMon = v:FindFirstChild("Humanoid").MaxHealth
                                     local log = v:FindFirstChild("Humanoid").Health
                                     local FindHealth = v:FindFirstChild("Humanoid").MaxHealth / 4 --iei
                                     local Max = FindMon / Lv_DAMAGE_BYPASS --Ex : 15 => 15 Hits 
                                     Ani.AnimationId = AC.anims.basic[2]
                                     AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
-                                    AC.hitboxMagnitude = 55
+                                    AC.hitboxMagnitude = 60
+                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade())); 
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "")
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "") wait()
                                     v.Humanoid:TakeDamage(math.ceil(Max))
@@ -1595,7 +1590,8 @@ MakerAtt = function(Fre)
                                     local Max = FindMon / Lv_DAMAGE_BYPASS --Ex : 15 => 15 Hits 
                                     Ani.AnimationId = AC.anims.basic[2]
                                     AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
-                                    AC.hitboxMagnitude = 55
+                                    AC.hitboxMagnitude = 60
+                                    game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("weaponChange",tostring(GetBlade())); 
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "")
                                     game:GetService("ReplicatedStorage").RigControllerEvent:FireServer("hit", getHitsEnemies(55), rA, "") wait()
                                     v.Humanoid:TakeDamage(math.ceil(Max))
@@ -1613,16 +1609,7 @@ MakerAtt = function(Fre)
                                 Ani.AnimationId = AC.anims.basic[2]
                                 AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
                                 AC.increment = 4
-                                AC.hitboxMagnitude = 60
-                                AC.timeToNextBlock = tick() -(rA)
-                                AC.timeToNextAttack = tick() -(rA)
-                                game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))
-                            end
-                            if AC.blades and AC.blades[1] then
-                                Ani.AnimationId = AC.anims.basic[2]
-                                AC.humanoid:LoadAnimation(Ani):Play(2, 2)  
-                                AC.increment = 4
-                                AC.hitboxMagnitude = 60
+                                AC.hitboxMagnitude = 58.5
                                 AC.timeToNextBlock = tick() -(rA)
                                 AC.timeToNextAttack = tick() -(rA)
                                 game:GetService("VirtualUser"):ClickButton1(Vector2.new(1300,760))
@@ -1660,7 +1647,7 @@ spawn(function()
         end)
     end
 end)
-
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 task.spawn(function() while wait()      do pcall(function() if Toggles._damagecounter.Value == true then game:GetService("ReplicatedStorage").Assets.GUI.DamageCounter.Enabled = true else game:GetService("ReplicatedStorage").Assets.GUI.DamageCounter.Enabled = false end end) end end)
 task.spawn(function() while wait()      do pcall(function() if Toggles.a_haki.Value == true then if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso") end end end) end end)
 task.spawn(function() while wait()      do pcall(function() if Toggles.genl1.Value == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki","Geppo") game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki","Buso") game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki","Soru") end end) end end)
