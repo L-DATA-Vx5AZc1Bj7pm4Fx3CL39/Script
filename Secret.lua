@@ -1,17 +1,12 @@
---[[local Player = game:GetService("Players").LocalPlayer
+local Player = game:GetService("Players").LocalPlayer
 local Char = Player.Character or Player.CharacterAdded:Wait()
 local Table = {
     "xpcall",
-    "pcall",
-    "Idle",
     "Deactivate",
     "PreloadAsync",
     "FindService",
     "collectgarbage",
     "GetPropertyChangedSignal",
-    "getfenv",
-    "Kick",
-    "kick"
 }
 local Table2 = {Char, game:GetService("CoreGui"), Player,Player.Kick,}
 local OldNameCall = nil
@@ -26,4 +21,4 @@ OldNameCall =
         end
         return OldNameCall(self, ...)
     end
-)]]
+)
