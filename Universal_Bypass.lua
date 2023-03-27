@@ -15,6 +15,10 @@ local Nos = {
     "xpcall",
     "gcinfo",
     "collectgarbage",
+    "xpcall",
+    "Deactivate",
+    "FindService",
+    "GetPropertyChangedSignal"
 }
 
 local Yes = {
