@@ -1,4 +1,4 @@
-local Player = game:GetService("Players").LocalPlayer
+--[[local Player = game:GetService("Players").LocalPlayer
 local Char = Player.Character or Player.CharacterAdded:Wait()
 local Table = {
     "xpcall",
@@ -21,4 +21,4 @@ OldNameCall =
         end
         return OldNameCall(self, ...)
     end
-)
+)]]
