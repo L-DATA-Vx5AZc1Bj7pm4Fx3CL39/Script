@@ -18,7 +18,6 @@ local Nos = {
     "xpcall",
     "Deactivate",
     "FindService",
-    "GetPropertyChangedSignal"
 }
 
 local Yes = {
